@@ -11,13 +11,44 @@
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>KT Course</title>
+
+    <style>
+        iframe#chatbase-bubble-window {
+            max-height: 85vh !important; /* Giới hạn chiều cao để không bị tràn màn hình điện thoại */
+            overflow-y: auto !important; /* Ép hiện thanh cuộn khi nội dung dài */
+            -webkit-overflow-scrolling: touch; /* Giúp cuộn mượt hơn trên iPhone */
+        }
+    </style>
+
+    <script>
+        (function () {
+            if (!window.chatbase || window.chatbase("getState") !== "initialized") {
+                window.chatbase = (...arguments) => {
+                    if (!window.chatbase.q) { window.chatbase.q = [] }
+                    window.chatbase.q.push(arguments)
+                };
+                window.chatbase = new Proxy(window.chatbase, {
+                    get(target, prop) {
+                        if (prop === "q") { return target.q }
+                        return (...args) => target(prop, ...args)
+                    }
+                })
+            }
+            // Tải script ngay lập tức thay vì đợi trang load xong (xóa window.addEventListener('load'))
+            const script = document.createElement("script");
+            script.src = "https://www.chatbase.co/embed.min.js";
+            script.id = "DUcVY4pyPWLxUHooyJRf0";
+            script.domain = "www.chatbase.co";
+            script.async = true; // Chạy song song để không chặn hiển thị nội dung web
+            document.head.appendChild(script);
+        })();
+    </script>
 </head>
 
 <body>
     <header id="header">
         <nav class="container-1 flex">
             <div class="nav-logo flex">
-                <!-- <i class="fa-brands fa-napster"></i> -->
                 <h4>KAY FRANCIS TEE</h4>
             </div>
             <div class="nav-list">
@@ -82,15 +113,8 @@
                 <p style="font-family: 'Segoe UI', 'Roboto', 'Tahoma', sans-serif;">
                     Chào mừng mọi người đến với khóa học tiếng Nhật của mình! Đây là một cơ hội tuyệt vời để chúng ta
                     cùng nhau khám phá và học hỏi về ngôn ngữ và văn hóa của đất nước mặt trời mọc.
-
-                    Trong khóa học này, chúng ta sẽ bắt đầu từ những kiến thức cơ bản như bảng chữ cái Hiragana và
-                    Katakana, cách phát âm, và các cấu trúc câu đơn giản. Chúng ta sẽ tiến xa hơn để nắm vững từ vựng,
-                    ngữ pháp và kỹ năng nghe, nói, đọc và viết tiếng Nhật.
-
-                    Khóa học của mình không chỉ giới hạn ở những kiến thức cơ bản của môn Nhật ở trường, mà còn cung cấp
-                    nền tảng
-                    vững chắc để các bạn có thể tiếp tục học các cấp độ cao hơn, như N4 N3 và những trình độ nâng cao
-                    sau này!
+                    <br><br>
+                    Khóa học của mình cung cấp nền tảng vững chắc để các bạn có thể tiếp tục học các cấp độ cao hơn như N4 N3 sau này!
                 </p>
                 <div class="bio-follow">
                     <div class="follow">
@@ -106,453 +130,21 @@
                 <div class="pattern-4"><img src="svg/pattern-4.svg" alt=""></div>
             </div>
         </section>
+        
         <section class="container hottopics flex">
             <div class="topics">
                 <h3>Our Courses</h3>
-                <p>Các khóa học hướng đến việc mang đến trải nghiệm tích cực và chất lượng tốt nhất cho mọi người !!!
-                </p>
-                <div class="lrbtn">
-                    <button class="leftbtn"><i class="fa-solid fa-arrow-left"></i></button>
-                    <button class="rightbtn"><i class="fa-solid fa-arrow-right"></i></button>
-                </div>
+                <p>Các khóa học hướng đến việc mang đến trải nghiệm tích cực và chất lượng tốt nhất cho mọi người !!!</p>
             </div>
             <div class="hotcards flex">
-                <div class="hcard">
-                    <a href="">
-                        <img src="img/JPD113.jpg" alt="">
-                        <div class="hdetails">
-                            <div class="hdetail">
-
-                            </div>
-                        </div>
-                    </a>
-
-                </div>
-                <div class="hcard">
-                    <a href="/">
-                        <img src="img/JPD123.jpg" alt="">
-                        <div class="hdetails">
-                            <div class="hdetail">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="hcard">
-                    <a href="/">
-                        <img src="img/JPD133.jpg" alt="">
-                        <div class="hdetails">
-                            <div class="hdetail">
-
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-
-
-
-
+                <div class="hcard"><a><img src="img/JPD113.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD123.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD133.jpg"></a></div>
             </div>
         </section>
-        <div class="rightShawdowImg"></div>
-        <div class="bigTitle container">
-            <h2>Khanh Trinh info</h2>
-            <p>Not showing off — just being me</p>
-        </div>
-        <section class="editorCard container flex">
-            <div class="edcard">
-                <a href="https://ujsli.jp/en/course01/" target="_blank" rel="noopener noreferrer">
 
-                    <img src="./img/UJS_2020.jpg">
-                    <div class="edcardContent">
-                        <div class="edcardTime flex">
-                            <h5>#Du hoc sinh</h5>
-                            <h5 class="flex">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>2.5</span>years
-                            </h5>
-                        </div>
-                        <h2>Long-Term Study Abroad Course</h2>
-                        <div class="edcard-designer flex">
-                            <div class="designer flex">
-                                <img src="./img/ava-wed.jpg">
-                                <div class="author">
-                                    <h5>チン バオ カン</h5>
-                                    <span>2019 - 2021</span>
-                                </div>
-                            </div>
-                            <a href="https://ujsli.jp/en/" class="readMore" target="_blank"
-                                rel="noopener noreferrer"><span>Read more</span></a>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="edcard">
-                <a href="https://www.jlpt.jp/e/index.html" target="_blank" rel="noopener noreferrer">
-                    <img src="./img/JLPT.jpg">
-                    <div class="edcardContent">
-                        <div class="edcardTime flex">
-                            <h5>#JLPT</h5>
-                            <h5 class="flex">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>2</span>times
-                            </h5>
-                        </div>
-                        <h2>JLPT Japanese-Language Proficiency Test</h2>
-                        <div class="edcard-designer flex">
-                            <div class="designer flex">
-                                <img src="./img/ava-wed.jpg">
-                                <div class="author">
-                                    <h5>Khanh Trinh</h5>
-                                    <span>2020 & 2024</span>
-                                </div>
-                            </div>
-                            <a href="https://www.jlpt.jp/e/index.html" class="readMore" target="_blank"
-                                rel="noopener noreferrer"><span>Read more</span></a>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="edcard">
-                <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src="./img/10.0JPD113.jpg">
-                    <div class="edcardContent">
-                        <div class="edcardTime flex">
-                            <h5>#FPT Hanoi</h5>
-                            <h5 class="flex">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>Ses</span>3
-                            </h5>
-                        </div>
-                        <h2>Elementary Japanese 1-A1/A2 (JPD113)</h2>
-                        <div class="edcard-designer flex">
-                            <div class="designer flex">
-                                <img src="./img/ava-wed.jpg">
-                                <div class="author">
-                                    <h5>Khanh Trinh</h5>
-                                    <span>FPTU Hanoi - Ses 3</span>
-                                </div>
-                            </div>
-                            <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                                class="readMore" target="_blank" rel="noopener noreferrer"><span>Read more</span></a>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="edcard">
-                <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src="./img/10.0JPD123.jpg">
-                    <div class="edcardContent">
-                        <div class="edcardTime flex">
-                            <h5>#FPT Hanoi</h5>
-                            <h5 class="flex">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>Ses</span>4
-                            </h5>
-                        </div>
-                        <h2>Elementary Japanese 1-A1/A2 (JPD123)</h2>
-                        <div class="edcard-designer flex">
-                            <div class="designer flex">
-                                <img src="./img/ava-wed.jpg">
-                                <div class="author">
-                                    <h5>Khanh Trinh</h5>
-                                    <span>FPTU Hanoi - Ses 4</span>
-                                </div>
-                            </div>
-                            <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                                class="readMore" target="_blank" rel="noopener noreferrer"><span>Read more</span></a>
-
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="edcard">
-                <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src="./img/10.0JPD133.jpg">
-                    <div class="edcardContent">
-                        <div class="edcardTime flex">
-                            <h5>#FPT Hanoi</h5>
-                            <h5 class="flex">
-                                <i class="fa-regular fa-clock"></i>
-                                <span>Ses</span>5
-                            </h5>
-                        </div>
-                        <h2>Elementary Japanese 1-A1/A2 (JPD133)</h2>
-                        <div class="edcard-designer flex">
-                            <div class="designer flex">
-                                <img src="./img/ava-wed.jpg">
-                                <div class="author">
-                                    <h5>Khanh Trinh</h5>
-                                    <span>FPTU Hanoi - Ses 5</span>
-                                </div>
-                            </div>
-                            <a href="https://drive.google.com/file/d/1rnrqzfusv7Uj84bchDsGXWcKW9vCrxsm/view?usp=sharing"
-                                class="readMore" target="_blank" rel="noopener noreferrer"><span>Read more</span></a>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="readMoreBtn flex">
-                <a href="">Show more posts<i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-        </section>
-        <div class="leftShawdow"></div>
-        <div class="contactbanner container flex">
-            <img src="img/contactus.jpg">
-        </div>
-        <div class="container bigTitle">
-            <h2>My Interest</h2>
-            <p>A part of me</p>
-        </div>
-        <div class="tegsec container flex">
-            <a href="/"><img src="img/business.png" alt="">
-                Business</a>
-            <a href="/"><img src="img/nature.png" alt="">
-                Nature</a>
-            <a href="/"><img src="img/plant.png" alt="">Plant</a>
-            <a href="/"><img src="img/interior.png" alt="">Interior</a>
-            <a href="/"><img src="img/minimal.png" alt="">Minimal</a>
-            <a href="/"><img src="img/animal.png" alt="">Animal</a>
-            <a href="/"><img src="img/space.png" alt="">Space</a>
-            <a href="/"><img src="img/food.png" alt="">
-                Food</a>
-            <a href="/"><img src="img/fashion.png" alt="">Fashion</a>
-            <a href="/"><img src="img/lifestyle.png" alt="">Lifestyle</a>
-            <a href="/"><img src="img/culture.png" alt="">Culture</a>
-            <a href="/"><img src="img/travel.png" alt="">Travel</a>
-        </div>
-        <div class="recentpostsec container flex">
-            <div class="recent">
-                <div class="bigTitle">
-                    <h2>Learn Japanese</h2>
-                    <p>My youtube channel</p>
-                </div>
-                <div class="posts">
-                    <div class="post flex">
-                        <a href="https://www.youtube.com/watch?v=Cj-9s8f83iQ&t=4s" target="_blank"
-                            rel="noopener noreferrer"><img src="img/6.png" alt=""></a>
-                        <div class="postdetails">
-                            <div class="postlabel">
-                                <a href="https://www.youtube.com/watch?v=Cj-9s8f83iQ&t=4s" target="_blank"
-                                    rel="noopener noreferrer">How to write Hiragana</a>
-                            </div>
-                            <h2>An Easy Way to Learn How to Write Hiragana Correctly</h2>
-                            <p>"An Easy Way to Learn How to Write Correctly" is a simple and effective guide designed to
-                                help learners improve their writing skills.</p>
-                            <div class="posttimeteg flex">
-                                <div class="flex travel">
-                                    <h5>#Khanh Trinh</h5>
-                                    <h5>#Hiragana</h5>
-                                </div>
-                                <h5 class="flex">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>7</span>mins
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="posts">
-                    <div class="post flex">
-                        <a href="https://www.youtube.com/watch?v=CaviXZlh_9k" target="_blank"
-                            rel="noopener noreferrer"><img src="img/speaking jpd.png" alt=""></a>
-                        <div class="postdetails">
-                            <div class="postlabel">
-                                <a href="https://www.youtube.com/watch?v=CaviXZlh_9k" target="_blank"
-                                    rel="noopener noreferrer">TIPS Speaking</a>
-                            </div>
-                            <h2>Guidelines on Proper Conduct During the Speaking Examination</h2>
-                            </a>
-                            <p>This guide provides essential recommendations for appropriate behavior and communication
-                                during the speaking examination.
-                                It covers aspects such as body language, tone of voice, respectful interaction, and
-                                strategies for presenting oneself confidently
-                                and professionally to the examiner.</p>
-                            <div class="posttimeteg flex">
-                                <div class="flex">
-                                    <h5>#Demo</h5>
-                                    <h5>#TiengNhatCoBan</h5>
-                                </div>
-                                <h5 class="flex">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>2</span>mins
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="posts">
-                    <div class="post flex">
-                        <a href="https://www.youtube.com/watch?v=t2rItFzSjuM" target="_blank"
-                            rel="noopener no-referrer"><img src="img/Thumbnail_JPD.png" alt=""></a>
-                        <div class="postdetails">
-                            <div class="postlabel">
-                                <a href="https://www.youtube.com/watch?v=t2rItFzSjuM" target="_blank"
-                                    rel="noopener noreferrer">Demo thi thu JPD113</a>
-                            </div>
-                            <h2>Guidelines for the FE Speaking Examination – Course Code: JPD113</h2>
-                            </a>
-                            <p>My video provides detailed instructions and practical advice for students taking the
-                                FE Speaking Examination in the JPD113 course.
-                                It outlines the test format,
-                                evaluation criteria, and key tips on how to communicate effectively, maintain proper
-                                etiquette, and perform with confidence during the speaking assessment.</p>
-                            <div class="posttimeteg flex">
-                                <div class="flex">
-                                    <h5>#JDP113</h5>
-                                    <h5>#Demo FE Speaking</h5>
-                                </div>
-                                <h5 class="flex">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>2</span>mins
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="posts">
-                    <div class="post flex">
-                        <a href="https://www.youtube.com/shorts/DaslL2Hzx2o" target="_blank"
-                            rel="noopener noreferrer"><img src="img/download.jfif" alt=""></a>
-                        <div class="postdetails">
-                            <div class="postlabel">
-                                <a href="https://www.youtube.com/shorts/DaslL2Hzx2o" target="_blank"
-                                    rel="noopener noreferrer">Advertisement</a>
-                            </div>
-                            <h2>A promotional video for my course</h2>
-                            </a>
-                            <p>This promotional video provides an engaging overview of my course, highlighting key
-                                features, learning outcomes, and the unique benefits of enrolling. It offers potential
-                                students a glimpse into the course structure, teaching methods, and how it can help them
-                                achieve their personal and professional goals. The video aims to capture attention,
-                                inspire interest, and encourage enrollment.</p>
-                            <div class="posttimeteg flex">
-                                <div class="flex">
-                                    <h5># JPD113</h5>
-                                    <h5># JPD123</h5>
-                                    <h5># JPD133</h5>
-                                </div>
-                                <h5 class="flex">
-                                    <i class="fa-regular fa-clock"></i>
-                                    <span>1</span>mins
-                                </h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="postslider">
-                <div class="popularposts">
-                    <div class="poptitle">
-                        <h3>Popular Feedbacks</h3>
-                    </div>
-                    <div class="populposts">
-                        <div class="populpost flex">
-                            <img src="img/work-freelancer.png">
-                            <div class="popupostde">
-                                <h4>Cóc vàng FPTU</h4>
-                                <div class="poputime flex">
-                                    <h5><span>Ses</span>3</h5>
-                                    <p>▪</p>
-                                    <h5>April 2024</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="populpost flex">
-                            <img src="img/work-freelancer2.png">
-                            <div class="popupostde">
-                                <h4>TOPJ N5</h4>
-                                <div class="poputime flex">
-                                    <h5><span>My first</span> achievement</h5>
-                                    <p>▪</p>
-                                    <h5>July 2024</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="populpost flex">
-                            <img src="img/work-freelancer3.png">
-                            <div class="popupostde">
-                                <h4>My student got 9.9 JPD123</h4>
-                                <div class="poputime flex">
-                                    <h5><span>Speaking</span> 10.0</h5>
-                                    <p>▪</p>
-                                    <h5>Fall 2024</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="populpost flex">
-                            <img src="img/work-freelancer4.png">
-                            <div class="popupostde">
-                                <h4>My student got 10.0 JPD123</h4>
-                                <div class="poputime flex">
-                                    <h5><span>Total</span> 10.0</h5>
-                                    <p>▪</p>
-                                    <h5>Srping 2025</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="populpost flex">
-                            <img src="img/work-freelancer5.png">
-                            <div class="popupostde">
-                                <h4>Spring 2025, all students scored above 8.5.</h4>
-                                <div class="poputime flex">
-                                    <h5><span>Min</span>8.6</h5>
-                                    <p>▪</p>
-                                    <h5>Spring 2025</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="popularposts">
-                    <div class="poptitle">
-                        <h3>Last Comment</h3>
-                    </div>
-                    <div class="postcomments">
-                        <div class="comment">
-                            <p><span>"</span>Khóa tiếng nhật chất lượng nhất hòa lạc.U I A U U I A<span>"</span>
-                            </p>
-                            <div class="authorcomment flex">
-                                <img src="img/author.png" alt="">
-                                <div class="authortimename">
-                                    <h5>HE197XXX</h5>
-                                    <span>01 April 2025</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <p><span>"</span>Không có Khánh thứ 2 ạ! Sẽ học anh đến hết kỳ 8 JS <span>"</span>
-                            </p>
-                            <div class="authorcomment flex">
-                                <img src="img/author.png" alt="">
-                                <div class="authortimename">
-                                    <h5>HE187XXX</h5>
-                                    <span>01 April 2025</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment">
-                            <p><span>"</span>Cảm ơn anh đã giúp em trả nợ môn thành công mà lại còn được điểm
-                                cao<span>"</span>
-                            </p>
-                            <div class="authorcomment flex">
-                                <img src="img/author.png" alt="">
-                                <div class="authortimename">
-                                    <h5>HE177XXX</h5>
-                                    <span>01 April 2025</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </main>
+
     <footer class="footer container">
         <div class="footersec flex">
             <div class="ftlogo">
@@ -560,98 +152,21 @@
                     <i class="fa-brands fa-napster"></i>
                     <h4>KAYTEE</h4>
                 </div>
-                <p> Hello, I am Khánh Trịnh.
-                    I am currently a third-year student at FPT University in Hanoi.
-                    I offer live courses via Google Meet: JPD113 - JPD123 - JPD133.
-                    I sincerely hope for your support and that we can embark on this journey together.
-                    Thank you very much for your time and consideration.</p>
-                <h4>Address</h4>
-                <p>FPT University Campus Hanoi</p>
-                <p>Viet Nam</p>
+                <p>Hello, I am Khánh Trịnh. Third-year student at FPT University Hanoi.</p>
             </div>
-            <div class="categories">
-                <h3>Categories</h3>
-                <div class="categoriess flex">
-                    <div class="cate">
-                        <ul>
-                            <li>Lesson1</li>
-                            <li>Lesson2</li>
-                            <li>Lesson3</li>
-                            <li>Lesson4</li>
-                            <li>Lesson5</li>
-                            <li>Lesson6</li>
-                        </ul>
-                    </div>
-                    <div class="cate">
-                        <ul>
-                            <li>Lesson7</li>
-                            <li>Lesson8</li>
-                            <li>Lesson9</li>
-                            <li>Lesson10</li>
-                            <li>Lesson11</li>
-                            <li>Learn More</li>
-                        </ul>
-                    </div>
-                </div>
             </div>
-            <div class="newletters" id="subemail">
-                <h3>Newletter</h3>
-                <p>Sharing information about myself and the courses I am teaching is truly a great opportunity to
-                    connect with others. I hope you will find valuable insights in my courses and join me in
-                    experiencing exciting things. Thank you all for taking the time to read and support! </p>
-                <form class="flex">
-                    <div class="inputemail flex">
-                        <i class="fa-solid fa-user"></i>
-                        <input type="email" placeholder="Your email">
-                    </div>
-                    <div class="inputemail flex">
-                        <i class="fa-regular fa-envelope"></i>
-                        <input type="email" placeholder="Email address">
-                    </div>
-                </form>
-                <button class="buttonbtn">Subscribe</button>
-            </div>
-        </div>
         <div class="us flex">
             <div class="copyright">
                 <p>&copy;2025 Created by <span>Khánh Trịnh</span></p>
             </div>
-            <div class="social flex">
-                <div class="flex">
-                    <i class="fa-brands fa-twitter"></i>
-                    <p>Twitter</p>
-                </div>
-                <div class="flex">
-                    <i class="fa-brands fa-facebook"></i>
-                    <p>Facebook</p>
-                </div>
-                <div class="flex">
-                    <i class="fa-brands fa-instagram"></i>
-                    <p>Instagram</p>
-                </div>
-            </div>
         </div>
     </footer>
+
     <script src="./js/main.js"></script>
+
+    <audio id="bg-music" autoplay loop muted>
+        <source src="audio/kt.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
-        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "DUcVY4pyPWLxUHooyJRf0"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
-    </script>
-</body>
-<audio id="bg-music" autoplay loop muted>
-    <source src="audio/kt.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-    // Khi trang tải xong, mở âm thanh và điều chỉnh âm lượng
-    const audioElement = document.getElementById('bg-music');
-
-    // Đảm bảo âm thanh sẽ phát ngay sau khi trang tải
-    window.addEventListener('load', () => {
-        audioElement.muted = false;  // Bỏ tắt âm thanh
-        audioElement.volume = 0.1;    // Giảm âm lượng
-        audioElement.play();          // Đảm bảo nhạc phát ngay
-    });
-</script>
-
-
-</html>
+        const audioElement = document.getElementById('bg-music');
