@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
         integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>KT Course - Jarvis AI</title>
+    <title>KT Course - Jarvis AI Assistant</title>
 
     <style>
-        /* Tối ưu thanh cuộn cho Jarvis */
+        /* Tối ưu giao diện Jarvis AI */
         #jarvis-messages::-webkit-scrollbar { width: 5px; }
         #jarvis-messages::-webkit-scrollbar-thumb { background: #003566; border-radius: 10px; }
         
@@ -32,6 +32,7 @@
             overflow: hidden; 
             border: 1px solid #ddd;
             z-index: 1001;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
@@ -39,16 +40,44 @@
 <body>
     <header id="header">
         <nav class="container-1 flex">
-            <div class="nav-logo flex"><h4>KAY FRANCIS TEE</h4></div>
+            <div class="nav-logo flex">
+                <h4>KAY FRANCIS TEE</h4>
+            </div>
             <div class="nav-list">
                 <ul class="flex">
                     <li><a class="nav-active">Home</a></li>
-                    <li><a>About Me</a></li>
+                    <li><a>About Me<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Category<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Blogs<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Pages<i class="fa-solid fa-caret-down"></i></a></li>
                     <li><a>Contact</a></li>
                 </ul>
             </div>
-            <div class="subbtn">
-                <button><a href="https://www.facebook.com/kaytee1204/" target="_blank">KhanhTrinh1204</a></button>
+            <div class="nav-search flex">
+                <div class="searchbar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <div class="searchclick">
+                        <form>
+                            <input type="text" placeholder="Search...">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="toggle-switch">
+                    <input type="checkbox" id="check">
+                    <label for="check" class="btntoggle"></label>
+                </div>
+                <div class="subbtn">
+                    <button><a href="https://www.facebook.com/kaytee1204/" target="_blank"
+                            rel="noopener noreferrer">KhanhTrinh1204</a></button>
+                </div>
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox" class="toggle">
+                    <div class="bars" id="bar1"></div>
+                    <div class="bars" id="bar2"></div>
+                    <div class="bars" id="bar3"></div>
+                </label>
             </div>
         </nav>
     </header>
@@ -57,11 +86,56 @@
         <section class="biosec container flex">
             <div class="bio">
                 <h4>皆さん、こんにちは !</h4>
-                <h1>Khánh Trịnh (N2)</h1>
-                <p>Chào mừng bạn đến với KT-Course. Hãy hỏi Jarvis bên dưới nếu cần hỗ trợ nhé!</p>
+                <h1>Tôi là Khánh Trịnh (N2)</h1>
+                <p style="font-family: 'Segoe UI', sans-serif;">
+                    Chào mừng mọi người đến với khóa học tiếng Nhật của mình! Nơi chia sẻ tài nguyên JPD113, JPD123, JPD133 hoàn toàn miễn phí.
+                    <br><br>
+                    Khóa học giúp các bạn có nền tảng vững chắc để chinh phục N4, N3 trong tương lai!
+                </p>
+                <div class="bio-follow">
+                    <div class="follow">
+                        <h4>Like and Follow me.</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="bioimg">
+                <img src="img/nam_preview_rev_1.png" alt="Khanh Trinh">
+                <div class="pattern-1"><img src="svg/pattern-1.svg" alt=""></div>
+                <div class="pattern-2"><img src="svg/pattern-2.svg" alt=""></div>
+                <div class="pattern-3"><img src="svg/pattern-3.svg" alt=""></div>
+                <div class="pattern-4"><img src="svg/pattern-4.svg" alt=""></div>
+            </div>
+        </section>
+        
+        <section class="container hottopics flex">
+            <div class="topics">
+                <h3>Our Courses</h3>
+                <p>Các khóa học hướng đến trải nghiệm học tiếng Nhật chất lượng nhất !!!</p>
+            </div>
+            <div class="hotcards flex">
+                <div class="hcard"><a><img src="img/JPD113.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD123.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD133.jpg"></a></div>
             </div>
         </section>
     </main>
+
+    <footer class="footer container">
+        <div class="footersec flex">
+            <div class="ftlogo">
+                <div class="logo flex">
+                    <i class="fa-brands fa-napster"></i>
+                    <h4>KAYTEE</h4>
+                </div>
+                <p>Khánh Trịnh - Sinh viên năm 3 Đại học FPT Hà Nội.</p>
+            </div>
+        </div>
+        <div class="us flex">
+            <div class="copyright">
+                <p>&copy;2025 Created by <span>Khánh Trịnh</span></p>
+            </div>
+        </div>
+    </footer>
 
     <div id="jarvis-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
         <button id="jarvis-toggle" style="background: #003566; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
@@ -89,13 +163,14 @@
         </div>
     </div>
 
+    <script src="./js/main.js"></script>
     <script>
         const GEMINI_API_KEY = "AIzaSyBmA4si4q_hXgBXXfXuUN0s28GQZeAFbgc"; //
         const MODEL_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
         const KNOWLEDGE_BASE = `
-Bạn là trợ lý ảo Jarvis của dự án KT-Course (do Khánh Trịnh tạo ra - người có bằng N2 và đang học N1).
-Hãy trả lời dựa trên bộ 55 câu hỏi sau:
+Bạn là trợ lý ảo Jarvis cho dự án KT-Course của Khánh Trịnh (người có bằng N2 và đang học N1).
+Hãy dùng dữ liệu Q&A dưới đây để hỗ trợ sinh viên:
 
 🔹 1. Câu hỏi chung về KT-Course
 Q1. KT-Course là gì?
@@ -251,7 +326,7 @@ Q56: Khánh Trịnh đã có bằng N2 và đang học tiếng nhật business v
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${KNOWLEDGE_BASE}\n\nCâu hỏi: ${prompt}` }] }]
+                        contents: [{ parts: [{ text: `${KNOWLEDGE_BASE}\n\nCâu hỏi sinh viên: ${prompt}` }] }]
                     })
                 });
                 const data = await response.json();
@@ -259,7 +334,7 @@ Q56: Khánh Trịnh đã có bằng N2 và đang học tiếng nhật business v
                 document.getElementById(loadingId).remove();
                 appendMsg(reply, 'ai');
             } catch (error) {
-                document.getElementById(loadingId).innerText = "Lỗi kết nối rồi!";
+                document.getElementById(loadingId).innerText = "Lỗi kết nối rồi bạn ơi!";
             }
         }
 
@@ -277,7 +352,7 @@ Q56: Khánh Trịnh đã có bằng N2 và đang học tiếng nhật business v
             msg.style.color = sender === 'user' ? "white" : "#333";
             if(sender !== 'user') msg.style.border = "1px solid #ddd";
             messagesDiv.appendChild(msg);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Fix lỗi không cuộn
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Fix lỗi cuộn
             return id;
         }
 
@@ -285,4 +360,5 @@ Q56: Khánh Trịnh đã có bằng N2 và đang học tiếng nhật business v
         jarvisInput.onkeypress = (e) => { if (e.key === 'Enter') handleSend(); };
     </script>
 </body>
+
 </html>
