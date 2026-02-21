@@ -2,154 +2,382 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/dark.css">
-    <link rel="stylesheet" href="./css/responsive.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>KT Course - Jarvis AI Assistant</title>
-    <style>
-        #jarvis-messages::-webkit-scrollbar { width: 5px; }
-        #jarvis-messages::-webkit-scrollbar-thumb { background: #003566; border-radius: 10px; }
-        .jarvis-window {
-            display: none; position: fixed; bottom: 90px; right: 20px; 
-            width: 350px; max-width: 90vw; height: 500px; 
-            background: white; border-radius: 15px; flex-direction: column; 
-            box-shadow: 0 5px 25px rgba(0,0,0,0.2); overflow: hidden; 
-            border: 1px solid #ddd; z-index: 1001;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/dark.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>KT Course</title>
+
+    <style>
+        iframe#chatbase-bubble-window {
+            max-height: 85vh !important; /* Giới hạn chiều cao để không bị tràn màn hình điện thoại */
+            overflow-y: auto !important; /* Ép hiện thanh cuộn khi nội dung dài */
+            -webkit-overflow-scrolling: touch; /* Giúp cuộn mượt hơn trên iPhone */
+        }
+    </style>
+
+    <div id="jarvis-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; font-family: sans-serif;">
+    <button id="jarvis-toggle" style="background: #003566; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        🤖
+    </button>
+    
+    <div id="jarvis-window" style="display: none; position: fixed; bottom: 90px; right: 20px; width: 350px; height: 500px; background: white; border-radius: 15px; flex-direction: column; box-shadow: 0 5px 25px rgba(0,0,0,0.2); overflow: hidden; border: 1px solid #ddd;">
+        <div style="background: #003566; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between;">
+            <span>Jarvis AI - KT Course</span>
+            <span id="close-chat" style="cursor: pointer;">×</span>
+        </div>
+        
+        <div id="jarvis-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f4f7f6;">
+            <div style="background: #e1e1e1; padding: 10px; border-radius: 10px; align-self: flex-start; font-size: 14px;">
+                Chào bạn! Mình là Jarvis. Bạn cần hỏi gì về kiến thức JPD không?
+            </div>
+        </div>
+
+        <div style="padding: 10px; border-top: 1px solid #eee; display: flex; background: white;">
+            <input type="text" id="jarvis-input" placeholder="Hỏi gì đó..." style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 20px; outline: none;">
+            <button id="jarvis-send" style="background: #003566; color: white; border: none; width: 40px; height: 40px; margin-left: 5px; border-radius: 50%; cursor: pointer;">✈️</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. THÔNG TIN CẤU HÌNH
+    const GEMINI_API_KEY = "AIzaSyBmA4si4q_hXgBXXfXuUN0s28GQZeAFbgc"; 
+    const MODEL_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    // 2. DÁN 55 CÂU HỎI Q&A CỦA BẠN VÀO ĐÂY
+    const KNOWLEDGE_BASE = `
+        🔹 1. Câu hỏi chung về KT-Course
+Q1. KT-Course là gì?
+A1. KT-Course là một website chia sẻ tài nguyên và nội dung học tiếng Nhật từ cơ bản, phục vụ cho việc tự học.
+Q2. Trang KT-Course dành cho ai?
+A2. Trang phù hợp với người mới bắt đầu học tiếng Nhật và sinh viên học các môn tiếng Nhật cơ sở.
+Q3. KT-Course có phải là khóa học chính thức không?
+A3. Không. Đây là website chia sẻ tài nguyên học tập, không phải khóa học cấp chứng chỉ.
+Q4. Học trên KT-Course có mất phí không?
+A4. Không. Nội dung trên KT-Course hoàn toàn miễn phí.
+Q5. KT-Course dạy những nội dung gì?
+A5. KT-Course cung cấp chữ cái tiếng Nhật, ngữ pháp cơ bản, video học và tài nguyên hỗ trợ học tiếng Nhật.
+Q6. Ai là người tạo ra KT-Course?
+A6. KT-Course được tạo bởi Khánh Trịnh để hỗ trợ việc học tiếng Nhật.
+Q7. KT-Course có phù hợp cho người mới bắt đầu không?
+A7. Có. Nội dung được thiết kế phù hợp cho người mới bắt đầu.
+________________________________________
+🔹 2. Câu hỏi về lộ trình & cấp độ
+Q8. KT-Course có lộ trình học không?
+A8. KT-Course chia nội dung theo môn học và chủ đề, người học có thể tự xây dựng lộ trình.
+Q9. Nên học KT-Course theo thứ tự nào?
+A9. Nên bắt đầu từ Hiragana, Katakana, sau đó đến ngữ pháp và các môn JPD.
+Q10. Có chia theo level hay môn học không?
+A10. Có. Nội dung được chia theo các môn như JPD113, JPD123, JPD133.
+Q11. JPD113 là học gì?
+A11. JPD113 là môn tiếng Nhật cơ bản, tập trung vào chữ cái và ngữ pháp nhập môn.
+Q12. JPD123 là học gì?
+A12. JPD123 là môn tiếp nối JPD113, mở rộng ngữ pháp và khả năng sử dụng tiếng Nhật.
+Q13. JPD133 là học gì?
+A13. JPD133 là môn nâng cao hơn trong nhóm cơ sở, giúp củng cố kỹ năng tiếng Nhật.
+Q14. Học xong các môn này đạt trình độ nào?
+A14. Sau khi học xong, người học đạt trình độ tương đương sơ cấp.
+________________________________________
+🔹 3. Câu hỏi về chữ cái tiếng Nhật
+Q15. Trang có dạy Hiragana không?
+A15. Có. KT-Course có nội dung học Hiragana.
+Q16. Trang có dạy Katakana không?
+A16. Có. KT-Course cung cấp tài nguyên học Katakana.
+Q17. Có video hướng dẫn viết Hiragana không?
+A17. Có. Trang có liên kết video hướng dẫn viết Hiragana.
+Q18. Có video hướng dẫn viết Katakana không?
+A18. Có. Trang có video hướng dẫn viết Katakana.
+Q19. Có hướng dẫn thứ tự nét viết không?
+A19. Có. Video hướng dẫn thể hiện thứ tự nét viết chuẩn.
+Q20. Có mẹo nhớ chữ cái nhanh không?
+A20. Có. Video và tài liệu giúp ghi nhớ chữ cái dễ hơn.
+________________________________________
+🔹 4. Câu hỏi về ngữ pháp & từ vựng
+Q21. KT-Course có dạy ngữ pháp tiếng Nhật không?
+A21. Có. Trang có nội dung ngữ pháp tiếng Nhật cơ bản.
+Q22. Ngữ pháp trên trang thuộc trình độ nào?
+A22. Chủ yếu thuộc trình độ sơ cấp.
+Q23. Có ví dụ minh họa cho từng mẫu ngữ pháp không?
+A23. Có. Ngữ pháp đi kèm ví dụ minh họa.
+Q24. Có giải thích bằng tiếng Việt không?
+A24. Có. Nội dung được giải thích bằng tiếng Việt.
+Q25. Có học từ vựng theo chủ đề không?
+A25. Có. Một số nội dung từ vựng được học theo chủ đề.
+Q26. Có học Kanji không?
+A26. Có. KT-Course có nội dung liên quan đến Kanji cơ bản.
+Q27. Kanji có kèm âm Hán Việt không?
+A27. Có. Kanji được giải thích kèm âm Hán Việt.
+________________________________________
+🔹 5. Câu hỏi về kỹ năng tiếng Nhật
+Q28. Trang có dạy phát âm không?
+A28. Có. Video hỗ trợ học phát âm chuẩn.
+Q29. Có luyện nghe tiếng Nhật không?
+A29. Có. Video giúp luyện kỹ năng nghe.
+Q30. Có luyện nói (speaking) không?
+A30. Có. Nội dung giúp người học làm quen với speaking.
+Q31. Có luyện đọc hiểu không?
+A31. Có. Một số bài học hỗ trợ luyện đọc.
+Q32. Có luyện viết câu không?
+A32. Có. Ngữ pháp và ví dụ giúp luyện viết câu.
+________________________________________
+🔹 6. Câu hỏi về video & tài nguyên
+Q33. KT-Course có video học không?
+A33. Có. KT-Course sử dụng video học tập.
+Q34. Video học được lấy từ đâu?
+A34. Video chủ yếu được liên kết từ YouTube.
+Q35. Có link YouTube không?
+A35. Có. Trang cung cấp link YouTube trực tiếp.
+Q36. Có thể xem video trực tiếp trên web không?
+A36. Có. Video được nhúng hoặc liên kết trực tiếp.
+Q37. Có tài liệu PDF hoặc slide để tải không?
+A37. Có một số tài liệu hỗ trợ học tập.
+Q38. Có thể học offline không?
+A38. Có thể nếu người học tải tài liệu về thiết bị.
+________________________________________
+🔹 7. Câu hỏi về JLPT & thi cử
+Q39. KT-Course có giúp ôn JLPT không?
+A39. Có. Nội dung phù hợp cho việc ôn JLPT sơ cấp.
+Q40. Nội dung có phù hợp thi JLPT N5 không?
+A40. Có. Nội dung phù hợp với trình độ N5.
+Q41. Nội dung có phù hợp thi JLPT N4 không?
+A41. Có thể hỗ trợ một phần cho N4.
+Q42. Có hướng dẫn cách học để đi thi không?
+A42. Có. Trang cung cấp định hướng học tập cơ bản.
+Q43. Có mẹo làm bài JLPT không?
+A43. Có một số gợi ý và video hỗ trợ.
+________________________________________
+🔹 8. Câu hỏi về cách sử dụng trang web
+Q44. Làm sao để bắt đầu học trên KT-Course?
+A44. Chỉ cần truy cập website và chọn nội dung muốn học.
+Q45. Có cần đăng ký tài khoản không?
+A45. Không. Người học không cần đăng ký.
+Q46. Có cần đăng nhập không?
+A46. Không. Website cho phép truy cập tự do.
+Q47. Có thể học từng phần riêng lẻ không?
+A47. Có. Người học có thể chọn nội dung bất kỳ.
+Q48. Có theo dõi tiến độ học không?
+A48. Không. Người học tự theo dõi tiến độ của mình.
+________________________________________
+🔹 9. Câu hỏi về phản hồi & độ uy tín
+Q49. KT-Course có feedback từ học viên không?
+A49. Có. Trang hiển thị một số phản hồi.
+Q50. “Popular feedbacks” là gì?
+A50. Là mục hiển thị các phản hồi nổi bật từ người học.
+Q51. Có học viên nào đậu JLPT nhờ KT-Course không?
+A51. KT-Course có chia sẻ phản hồi tích cực từ người học.
+________________________________________
+🔹 10. Câu hỏi liên hệ & hỗ trợ
+Q52. Muốn liên hệ với người tạo khóa học thì làm sao?
+A52. Có thể liên hệ thông qua thông tin trên website.
+Q53. Có email hoặc form liên hệ không?
+A53. Có. Trang cung cấp thông tin liên hệ.
+Q54. Có group học hoặc cộng đồng không?
+A54. Hiện tại chưa có cộng đồng học chính thức.
+Q55. Có thể góp ý hoặc hỏi bài không?
+A55. Có. Người học có thể gửi góp ý qua kênh liên hệ.
+Q56: Khánh Trịnh đã có bằng N2 và đang học tiếng nhật business và N1
+
+    `;
+
+    const jarvisToggle = document.getElementById('jarvis-toggle');
+    const jarvisWindow = document.getElementById('jarvis-window');
+    const messagesDiv = document.getElementById('jarvis-messages');
+    const jarvisInput = document.getElementById('jarvis-input');
+    const jarvisSend = document.getElementById('jarvis-send');
+
+    jarvisToggle.onclick = () => { jarvisWindow.style.display = jarvisWindow.style.display === 'none' ? 'flex' : 'none'; };
+    document.getElementById('close-chat').onclick = () => { jarvisWindow.style.display = 'none'; };
+
+    async function handleSend() {
+        const userPrompt = jarvisInput.value.trim();
+        if (!userPrompt) return;
+
+        appendMsg(userPrompt, 'user');
+        jarvisInput.value = '';
+
+        const loadingId = appendMsg("Jarvis đang tra cứu...", 'ai');
+
+        try {
+            const response = await fetch(MODEL_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ 
+                        parts: [{ 
+                            text: `Dựa trên dữ liệu sau: ${KNOWLEDGE_BASE}\nHãy trả lời câu hỏi: ${userPrompt}` 
+                        }] 
+                    }]
+                })
+            });
+            const data = await response.json();
+            const reply = data.candidates[0].content.parts[0].text;
+            
+            document.getElementById(loadingId).remove();
+            appendMsg(reply, 'ai');
+        } catch (error) {
+            document.getElementById(loadingId).innerText = "Lỗi kết nối. Thử lại sau nhé!";
+        }
+    }
+
+    function appendMsg(text, sender) {
+        const id = 'msg-' + Date.now();
+        const msg = document.createElement('div');
+        msg.id = id;
+        msg.innerText = text;
+        msg.style.padding = "10px";
+        msg.style.borderRadius = "10px";
+        msg.style.maxWidth = "85%";
+        msg.style.fontSize = "14px";
+        
+        if (sender === 'user') {
+            msg.style.alignSelf = "flex-end";
+            msg.style.background = "#003566";
+            msg.style.color = "white";
+        } else {
+            msg.style.alignSelf = "flex-start";
+            msg.style.background = "#fff";
+            msg.style.border = "1px solid #ddd";
+        }
+
+        messagesDiv.appendChild(msg);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Tự động cuộn
+        return id;
+    }
+
+    jarvisSend.onclick = handleSend;
+    jarvisInput.onkeypress = (e) => { if (e.key === 'Enter') handleSend(); };
+</script>
 </head>
 
 <body>
-    <header id="header">
-        <nav class="container-1 flex">
-            <div class="nav-logo flex"><h4>KAY FRANCIS TEE</h4></div>
-            <div class="nav-list">
-                <ul class="flex">
-                    <li><a class="nav-active">Home</a></li>
-                    <li><a>About Me</a></li>
-                    <li><a>Contact</a></li>
-                </ul>
-            </div>
-            <div class="subbtn">
-                <button><a href="https://www.facebook.com/kaytee1204/" target="_blank">KhanhTrinh1204</a></button>
-            </div>
-        </nav>
-    </header>
+    <header id="header">
+        <nav class="container-1 flex">
+            <div class="nav-logo flex">
+                <h4>KAY FRANCIS TEE</h4>
+            </div>
+            <div class="nav-list">
+                <ul class="flex">
+                    <li><a class="nav-active">Home</a></li>
+                    <li><a>About Me<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Category<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Blogs<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Pages<i class="fa-solid fa-caret-down"></i></a></li>
+                    <li><a>Contact</a></li>
+                </ul>
+            </div>
+            <div class="nav-search flex">
+                <div class="searchbar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <div class="searchclick">
+                        <form>
+                            <input type="text" placeholder="Search...">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </form>
+                        <div class="tagssec">
+                            <h3>Popular tags:</h3>
+                            <div class="tags flex">
+                                <a href="#">#JPD113<span>,</span></a>
+                                <a href="#">#kt<span>,</span></a>
+                                <a href="#">#KhanhTrinh<span>,</span></a>
+                                <a href="#">#jpd23<span>,</span></a>
+                                <a href="#">#jpd133</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <main id="main">
-        <section class="biosec container flex">
-            <div class="bio">
-                <h4>皆さん、こんにちは !</h4>
-                <h1>Khánh Trịnh (N2)</h1>
-                <p>Chào mừng bạn đến với KT-Course. Nơi học JPD113, JPD123, JPD133 miễn phí.</p>
-            </div>
-            <div class="bioimg">
-                <img src="img/nam_preview_rev_1.png" alt="Khanh Trinh">
-            </div>
-        </section>
-        
-        <section class="container hottopics flex">
-            <div class="topics"><h3>Our Courses</h3></div>
-            <div class="hotcards flex">
-                <div class="hcard"><a><img src="img/JPD113.jpg"></a></div>
-                <div class="hcard"><a><img src="img/JPD123.jpg"></a></div>
-                <div class="hcard"><a><img src="img/JPD133.jpg"></a></div>
-            </div>
-        </section>
-    </main>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="check">
+                    <label for="check" class="btntoggle"></label>
+                </div>
+                <div class="subbtn">
+                    <button><a href="https://www.facebook.com/kaytee1204/" target="_blank"
+                            rel="noopener noreferrer">KhanhTrinh1204</a></button>
+                </div>
+                <input type="checkbox" id="checkbox">
+                <label for="checkbox" class="toggle">
+                    <div class="bars" id="bar1"></div>
+                    <div class="bars" id="bar2"></div>
+                    <div class="bars" id="bar3"></div>
+                </label>
+            </div>
+        </nav>
+    </header>
 
-    <div id="jarvis-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-        <button id="jarvis-toggle" style="background: #003566; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-            🤖
-        </button>
-        <div id="jarvis-window" class="jarvis-window">
-            <div style="background: #003566; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
-                <span><i class="fa-solid fa-robot"></i> Jarvis AI Assistant</span>
-                <span id="close-chat" style="cursor: pointer;">&times;</span>
-            </div>
-            <div id="jarvis-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f4f7f6;">
-                <div style="background: #e1e1e1; padding: 10px; border-radius: 10px 10px 10px 0; align-self: flex-start; font-size: 14px; max-width: 85%;">
-                    Chào bạn! Mình là Jarvis. Bạn cần hỏi gì về kiến thức JPD không?
-                </div>
-            </div>
-            <div style="padding: 10px; border-top: 1px solid #eee; display: flex; background: white; align-items: center;">
-                <input type="text" id="jarvis-input" placeholder="Hỏi Jarvis..." style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 20px; outline: none;">
-                <button id="jarvis-send" style="background: #003566; color: white; border: none; width: 35px; height: 35px; margin-left: 8px; border-radius: 50%; cursor: pointer;"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
+    <main id="main">
+        <section class="biosec container flex">
+            <div class="bio">
+                <h4>皆さん、こんにちは !</h4>
+                <h1>私は
+                    <div>
+                        <span class="multi-text"></span>
+                        <span class="blink"></span>
+                    </div>
+                </h1>
+                <p style="font-family: 'Segoe UI', 'Roboto', 'Tahoma', sans-serif;">
+                    Chào mừng mọi người đến với khóa học tiếng Nhật của mình! Đây là một cơ hội tuyệt vời để chúng ta
+                    cùng nhau khám phá và học hỏi về ngôn ngữ và văn hóa của đất nước mặt trời mọc.
+                    <br><br>
+                    Khóa học của mình cung cấp nền tảng vững chắc để các bạn có thể tiếp tục học các cấp độ cao hơn như N4 N3 sau này!
+                </p>
+                <div class="bio-follow">
+                    <div class="follow">
+                        <h4>Like and Follow me.</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="bioimg">
+                <img src="img/nam_preview_rev_1.png" alt="">
+                <div class="pattern-1"><img src="svg/pattern-1.svg" alt=""></div>
+                <div class="pattern-2"><img src="svg/pattern-2.svg" alt=""></div>
+                <div class="pattern-3"><img src="svg/pattern-3.svg" alt=""></div>
+                <div class="pattern-4"><img src="svg/pattern-4.svg" alt=""></div>
+            </div>
+        </section>
+        
+        <section class="container hottopics flex">
+            <div class="topics">
+                <h3>Our Courses</h3>
+                <p>Các khóa học hướng đến việc mang đến trải nghiệm tích cực và chất lượng tốt nhất cho mọi người !!!</p>
+            </div>
+            <div class="hotcards flex">
+                <div class="hcard"><a><img src="img/JPD113.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD123.jpg"></a></div>
+                <div class="hcard"><a><img src="img/JPD133.jpg"></a></div>
+            </div>
+        </section>
 
-    <script>
-        // KIỂM TRA: API KEY NÀY PHẢI TRÙNG KHỚP VỚI ẢNH BẠN GỬI
-        const KEY = "AIzaSyBmA4si4q_hXgBXXfXuUN0s28GQZeAFbgc"; 
-        
-        // SỬ DỤNG V1 THAY VÌ V1BETA ĐỂ ỔN ĐỊNH HƠN
-        const API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${KEY}`;
+    </main>
 
-        // BỘ NÃO 55 CÂU
-        const KB = `Bạn là Jarvis của KT-Course. Tác giả Khánh Trịnh (N2). 1. KT-Course là web học tiếng Nhật miễn phí. 2. JPD113 học chữ cái. (Dán tiếp câu của bạn ở đây)`;
+    <footer class="footer container">
+        <div class="footersec flex">
+            <div class="ftlogo">
+                <div class="logo flex">
+                    <i class="fa-brands fa-napster"></i>
+                    <h4>KAYTEE</h4>
+                </div>
+                <p>Hello, I am Khánh Trịnh. Third-year student at FPT University Hanoi.</p>
+            </div>
+            </div>
+        <div class="us flex">
+            <div class="copyright">
+                <p>&copy;2025 Created by <span>Khánh Trịnh</span></p>
+            </div>
+        </div>
+    </footer>
 
-        const jarvisToggle = document.getElementById('jarvis-toggle');
-        const jarvisWindow = document.getElementById('jarvis-window');
-        const messagesDiv = document.getElementById('jarvis-messages');
-        const jarvisInput = document.getElementById('jarvis-input');
+    <script src="./js/main.js"></script>
 
-        jarvisToggle.onclick = () => { jarvisWindow.style.display = (jarvisWindow.style.display === 'none' || !jarvisWindow.style.display) ? 'flex' : 'none'; };
-        document.getElementById('close-chat').onclick = () => { jarvisWindow.style.display = 'none'; };
+    <audio id="bg-music" autoplay loop muted>
+        <source src="audio/kt.mp3" type="audio/mpeg">
+    </audio>
 
-        async function handleSend() {
-            const prompt = jarvisInput.value.trim();
-            if (!prompt) return;
-            
-            appendMsg(prompt, 'user');
-            jarvisInput.value = '';
-            const loadingId = appendMsg("Jarvis đang tra cứu...", 'ai');
+    <script>
+        const audioElement = document.getElementById('bg-music');
 
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `${KB}\n\nCâu hỏi: ${prompt}` }] }]
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Lỗi từ Google API:", errorData);
-                    throw new Error(errorData.error.message || "Lỗi mạng");
-                }
-
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-                appendMsg(data.candidates[0].content.parts[0].text, 'ai');
-
-            } catch (error) {
-                console.error("Chi tiết lỗi:", error);
-                document.getElementById(loadingId).innerText = "Lỗi kết nối rồi bạn ơi! Kiểm tra lại API Key nhé.";
-            }
-        }
-
-        function appendMsg(text, sender) {
-            const id = 'msg-' + Date.now();
-            const msg = document.createElement('div');
-            msg.id = id; msg.innerText = text;
-            msg.style.padding = "10px"; msg.style.borderRadius = "10px";
-            msg.style.maxWidth = "85%"; msg.style.fontSize = "14px";
-            msg.style.alignSelf = sender === 'user' ? "flex-end" : "flex-start";
-            msg.style.background = sender === 'user' ? "#003566" : "#fff";
-            msg.style.color = sender === 'user' ? "white" : "#333";
-            if(sender !== 'user') msg.style.border = "1px solid #ddd";
-            messagesDiv.appendChild(msg);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
-            return id;
-        }
-
-        document.getElementById('jarvis-send').onclick = handleSend;
-        jarvisInput.onkeypress = (e) => { if (e.key === 'Enter') handleSend(); };
-    </script>
-</body>
-</html>
+check xem ok chưa
