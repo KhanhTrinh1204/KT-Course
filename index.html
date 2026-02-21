@@ -633,9 +633,241 @@
         </div>
     </footer>
     <script src="./js/main.js"></script>
-    <script>
-        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "DUcVY4pyPWLxUHooyJRf0"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
-    </script>
+    <style>
+    #jarvis-messages::-webkit-scrollbar { width: 5px; }
+    #jarvis-messages::-webkit-scrollbar-thumb { background: #003566; border-radius: 10px; }
+    .jarvis-chat-window {
+        display: none; position: fixed; bottom: 90px; right: 20px; 
+        width: 350px; max-width: 90vw; height: 500px; 
+        background: white; border-radius: 15px; flex-direction: column; 
+        box-shadow: 0 5px 25px rgba(0,0,0,0.2); overflow: hidden; 
+        border: 1px solid #ddd; z-index: 2000;
+    }
+</style>
+
+<div id="jarvis-container" style="position: fixed; bottom: 20px; right: 20px; z-index: 2000;">
+    <button id="jarvis-toggle" style="background: #003566; color: white; border: none; border-radius: 50%; width: 60px; height: 60px; cursor: pointer; font-size: 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+        🤖
+    </button>
+    
+    <div id="jarvis-window" class="jarvis-chat-window">
+        <div style="background: #003566; color: white; padding: 15px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;">
+            <span><i class="fa-solid fa-robot"></i> Jarvis AI Assistant</span>
+            <span id="close-chat" style="cursor: pointer; font-size: 20px;">&times;</span>
+        </div>
+        
+        <div id="jarvis-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: #f4f7f6;">
+            <div style="background: #e1e1e1; padding: 10px; border-radius: 10px 10px 10px 0; align-self: flex-start; font-size: 14px; max-width: 85%;">
+                Chào bạn! Mình là Jarvis. Mình đã học thuộc 55 câu hỏi về KT-Course. Cần giúp gì không?
+            </div>
+        </div>
+
+        <div style="padding: 10px; border-top: 1px solid #eee; display: flex; background: white; align-items: center;">
+            <input type="text" id="jarvis-input" placeholder="Hỏi Jarvis về JPD..." style="flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 20px; outline: none; font-size: 14px;">
+            <button id="jarvis-send" style="background: #003566; color: white; border: none; width: 35px; height: 35px; margin-left: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const GEMINI_KEY = "AIzaSyDu0aHb1f-0-N_7e3DVGYc-jV0MSszzOXk"; //
+    const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
+
+    // DỮ LIỆU 55 CÂU HỎI ĐƯỢC NẠP VÀO ĐÂY
+    const KNOWLEDGE_BASE = `
+        Bạn là trợ lý ảo Jarvis cho dự án KT-Course của Khánh Trịnh.
+        📚 KT-Course – FULL QUESTION & ANSWER DATASET
+________________________________________
+🔹 1. Câu hỏi chung về KT-Course
+Q1. KT-Course là gì?
+A1. KT-Course là một website chia sẻ tài nguyên và nội dung học tiếng Nhật từ cơ bản, phục vụ cho việc tự học.
+Q2. Trang KT-Course dành cho ai?
+A2. Trang phù hợp với người mới bắt đầu học tiếng Nhật và sinh viên học các môn tiếng Nhật cơ sở.
+Q3. KT-Course có phải là khóa học chính thức không?
+A3. Không. Đây là website chia sẻ tài nguyên học tập, không phải khóa học cấp chứng chỉ.
+Q4. Học trên KT-Course có mất phí không?
+A4. Không. Nội dung trên KT-Course hoàn toàn miễn phí.
+Q5. KT-Course dạy những nội dung gì?
+A5. KT-Course cung cấp chữ cái tiếng Nhật, ngữ pháp cơ bản, video học và tài nguyên hỗ trợ học tiếng Nhật.
+Q6. Ai là người tạo ra KT-Course?
+A6. KT-Course được tạo bởi Khánh Trịnh để hỗ trợ việc học tiếng Nhật.
+Q7. KT-Course có phù hợp cho người mới bắt đầu không?
+A7. Có. Nội dung được thiết kế phù hợp cho người mới bắt đầu.
+________________________________________
+🔹 2. Câu hỏi về lộ trình & cấp độ
+Q8. KT-Course có lộ trình học không?
+A8. KT-Course chia nội dung theo môn học và chủ đề, người học có thể tự xây dựng lộ trình.
+Q9. Nên học KT-Course theo thứ tự nào?
+A9. Nên bắt đầu từ Hiragana, Katakana, sau đó đến ngữ pháp và các môn JPD.
+Q10. Có chia theo level hay môn học không?
+A10. Có. Nội dung được chia theo các môn như JPD113, JPD123, JPD133.
+Q11. JPD113 là học gì?
+A11. JPD113 là môn tiếng Nhật cơ bản, tập trung vào chữ cái và ngữ pháp nhập môn.
+Q12. JPD123 là học gì?
+A12. JPD123 là môn tiếp nối JPD113, mở rộng ngữ pháp và khả năng sử dụng tiếng Nhật.
+Q13. JPD133 là học gì?
+A13. JPD133 là môn nâng cao hơn trong nhóm cơ sở, giúp củng cố kỹ năng tiếng Nhật.
+Q14. Học xong các môn này đạt trình độ nào?
+A14. Sau khi học xong, người học đạt trình độ tương đương sơ cấp.
+________________________________________
+🔹 3. Câu hỏi về chữ cái tiếng Nhật
+Q15. Trang có dạy Hiragana không?
+A15. Có. KT-Course có nội dung học Hiragana.
+Q16. Trang có dạy Katakana không?
+A16. Có. KT-Course cung cấp tài nguyên học Katakana.
+Q17. Có video hướng dẫn viết Hiragana không?
+A17. Có. Trang có liên kết video hướng dẫn viết Hiragana.
+Q18. Có video hướng dẫn viết Katakana không?
+A18. Có. Trang có video hướng dẫn viết Katakana.
+Q19. Có hướng dẫn thứ tự nét viết không?
+A19. Có. Video hướng dẫn thể hiện thứ tự nét viết chuẩn.
+Q20. Có mẹo nhớ chữ cái nhanh không?
+A20. Có. Video và tài liệu giúp ghi nhớ chữ cái dễ hơn.
+________________________________________
+🔹 4. Câu hỏi về ngữ pháp & từ vựng
+Q21. KT-Course có dạy ngữ pháp tiếng Nhật không?
+A21. Có. Trang có nội dung ngữ pháp tiếng Nhật cơ bản.
+Q22. Ngữ pháp trên trang thuộc trình độ nào?
+A22. Chủ yếu thuộc trình độ sơ cấp.
+Q23. Có ví dụ minh họa cho từng mẫu ngữ pháp không?
+A23. Có. Ngữ pháp đi kèm ví dụ minh họa.
+Q24. Có giải thích bằng tiếng Việt không?
+A24. Có. Nội dung được giải thích bằng tiếng Việt.
+Q25. Có học từ vựng theo chủ đề không?
+A25. Có. Một số nội dung từ vựng được học theo chủ đề.
+Q26. Có học Kanji không?
+A26. Có. KT-Course có nội dung liên quan đến Kanji cơ bản.
+Q27. Kanji có kèm âm Hán Việt không?
+A27. Có. Kanji được giải thích kèm âm Hán Việt.
+________________________________________
+🔹 5. Câu hỏi về kỹ năng tiếng Nhật
+Q28. Trang có dạy phát âm không?
+A28. Có. Video hỗ trợ học phát âm chuẩn.
+Q29. Có luyện nghe tiếng Nhật không?
+A29. Có. Video giúp luyện kỹ năng nghe.
+Q30. Có luyện nói (speaking) không?
+A30. Có. Nội dung giúp người học làm quen với speaking.
+Q31. Có luyện đọc hiểu không?
+A31. Có. Một số bài học hỗ trợ luyện đọc.
+Q32. Có luyện viết câu không?
+A32. Có. Ngữ pháp và ví dụ giúp luyện viết câu.
+________________________________________
+🔹 6. Câu hỏi về video & tài nguyên
+Q33. KT-Course có video học không?
+A33. Có. KT-Course sử dụng video học tập.
+Q34. Video học được lấy từ đâu?
+A34. Video chủ yếu được liên kết từ YouTube.
+Q35. Có link YouTube không?
+A35. Có. Trang cung cấp link YouTube trực tiếp.
+Q36. Có thể xem video trực tiếp trên web không?
+A36. Có. Video được nhúng hoặc liên kết trực tiếp.
+Q37. Có tài liệu PDF hoặc slide để tải không?
+A37. Có một số tài liệu hỗ trợ học tập.
+Q38. Có thể học offline không?
+A38. Có thể nếu người học tải tài liệu về thiết bị.
+________________________________________
+🔹 7. Câu hỏi về JLPT & thi cử
+Q39. KT-Course có giúp ôn JLPT không?
+A39. Có. Nội dung phù hợp cho việc ôn JLPT sơ cấp.
+Q40. Nội dung có phù hợp thi JLPT N5 không?
+A40. Có. Nội dung phù hợp với trình độ N5.
+Q41. Nội dung có phù hợp thi JLPT N4 không?
+A41. Có thể hỗ trợ một phần cho N4.
+Q42. Có hướng dẫn cách học để đi thi không?
+A42. Có. Trang cung cấp định hướng học tập cơ bản.
+Q43. Có mẹo làm bài JLPT không?
+A43. Có một số gợi ý và video hỗ trợ.
+________________________________________
+🔹 8. Câu hỏi về cách sử dụng trang web
+Q44. Làm sao để bắt đầu học trên KT-Course?
+A44. Chỉ cần truy cập website và chọn nội dung muốn học.
+Q45. Có cần đăng ký tài khoản không?
+A45. Không. Người học không cần đăng ký.
+Q46. Có cần đăng nhập không?
+A46. Không. Website cho phép truy cập tự do.
+Q47. Có thể học từng phần riêng lẻ không?
+A47. Có. Người học có thể chọn nội dung bất kỳ.
+Q48. Có theo dõi tiến độ học không?
+A48. Không. Người học tự theo dõi tiến độ của mình.
+________________________________________
+🔹 9. Câu hỏi về phản hồi & độ uy tín
+Q49. KT-Course có feedback từ học viên không?
+A49. Có. Trang hiển thị một số phản hồi.
+Q50. “Popular feedbacks” là gì?
+A50. Là mục hiển thị các phản hồi nổi bật từ người học.
+Q51. Có học viên nào đậu JLPT nhờ KT-Course không?
+A51. KT-Course có chia sẻ phản hồi tích cực từ người học.
+________________________________________
+🔹 10. Câu hỏi liên hệ & hỗ trợ
+Q52. Muốn liên hệ với người tạo khóa học thì làm sao?
+A52. Có thể liên hệ thông qua thông tin trên website.
+Q53. Có email hoặc form liên hệ không?
+A53. Có. Trang cung cấp thông tin liên hệ.
+Q54. Có group học hoặc cộng đồng không?
+A54. Hiện tại chưa có cộng đồng học chính thức.
+Q55. Có thể góp ý hoặc hỏi bài không?
+A55. Có. Người học có thể gửi góp ý qua kênh liên hệ.
+Q56: Khánh Trịnh đạt 10.0 các môn JPD tại đại học FPT Hà Nội, đã có bằng N2 và đang học tiếng nhật business và N1
+    `;
+
+    const jarvisToggle = document.getElementById('jarvis-toggle');
+    const jarvisWindow = document.getElementById('jarvis-window');
+    const messagesDiv = document.getElementById('jarvis-messages');
+    const jarvisInput = document.getElementById('jarvis-input');
+
+    jarvisToggle.onclick = () => { 
+        jarvisWindow.style.display = (jarvisWindow.style.display === 'none' || !jarvisWindow.style.display) ? 'flex' : 'none'; 
+    };
+    document.getElementById('close-chat').onclick = () => { jarvisWindow.style.display = 'none'; };
+
+    async function handleSend() {
+        const prompt = jarvisInput.value.trim();
+        if (!prompt) return;
+
+        appendMsg(prompt, 'user');
+        jarvisInput.value = '';
+        const loadingId = appendMsg("Jarvis đang tra cứu dữ liệu...", 'ai');
+
+        try {
+            const response = await fetch(GEMINI_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Dữ liệu kiến thức: ${KNOWLEDGE_BASE}\n\nCâu hỏi sinh viên: ${prompt}` }] }]
+                })
+            });
+
+            const data = await response.json();
+            document.getElementById(loadingId).remove();
+            
+            if (data.candidates) {
+                appendMsg(data.candidates[0].content.parts[0].text, 'ai');
+            } else { throw new Error(); }
+        } catch (error) {
+            document.getElementById(loadingId).innerText = "Lỗi kết nối rồi! Bạn kiểm tra lại API Key nhé.";
+        }
+    }
+
+    function appendMsg(text, sender) {
+        const id = 'msg-' + Date.now();
+        const msg = document.createElement('div');
+        msg.id = id;
+        msg.innerText = text;
+        msg.style.padding = "10px";
+        msg.style.borderRadius = "10px";
+        msg.style.maxWidth = "85%";
+        msg.style.fontSize = "14px";
+        msg.style.alignSelf = sender === 'user' ? "flex-end" : "flex-start";
+        msg.style.background = sender === 'user' ? "#003566" : "#fff";
+        msg.style.color = sender === 'user' ? "white" : "#333";
+        if(sender !== 'user') msg.style.border = "1px solid #ddd";
+
+        messagesDiv.appendChild(msg);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight; // Fix lỗi cuộn
+        return id;
+    }
 </body>
 <audio id="bg-music" autoplay loop muted>
     <source src="audio/kt.mp3" type="audio/mpeg">
