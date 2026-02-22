@@ -137,3 +137,11 @@ checkBox.addEventListener('change', function() {
   }
 
 });
+
+// Update copyright year
+document.addEventListener('DOMContentLoaded', function() {
+  const yearElement = document.getElementById('newYear');
+  if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+  }
+});

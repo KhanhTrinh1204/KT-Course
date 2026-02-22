@@ -4,6 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+    
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/dark.css">
     <link rel="stylesheet" href="./css/responsive.css">
@@ -614,7 +621,7 @@
         </div>
         <div class="us flex">
             <div class="copyright">
-                <p>&copy;2025 Created by <span>Khánh Trịnh</span></p>
+                <p>&copy; <span id="newYear"></span> Created by <span>Khánh Trịnh</span></p>
             </div>
             <div class="social flex">
                 <div class="flex">
@@ -632,10 +639,10 @@
             </div>
         </div>
     </footer>
+    <script src="./js/env.js"></script>
+    <script src="./js/config.js"></script>
     <script src="./js/main.js"></script>
-    <script>
-        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "DUcVY4pyPWLxUHooyJRf0"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
-    </script>
+    <script src="./js/gemini-chat.js"></script>
 </body>
 <audio id="bg-music" autoplay loop muted>
     <source src="audio/kt.mp3" type="audio/mpeg">
