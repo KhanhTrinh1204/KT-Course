@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useScrollHeader } from '../hooks/useScrollHeader';
 
 const Header = () => {
@@ -6,27 +7,31 @@ const Header = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isScrolled = useScrollHeader();
+  const location = useLocation();
 
   const handleDarkModeToggle = () => {
     setDarkMode(!darkMode);
     document.body.classList.toggle('body');
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
     <header id="header" className={isScrolled ? 'scrolled' : ''}>
       <nav className="container-1 flex">
         <div className="nav-logo flex">
-          <h4>KAY TEE</h4>
+          <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <h4>KAY FRANCIS TEE</h4>
+          </Link>
         </div>
         
         <div className="nav-list" style={{ display: mobileMenuOpen ? 'block' : '' }}>
           <ul className="flex">
-            <li><a className="nav-active">Home</a></li>
-            <li><a>About Me<i className="fa-solid fa-caret-down"></i></a></li>
-            <li><a>Category<i className="fa-solid fa-caret-down"></i></a></li>
-            <li><a>Blogs<i className="fa-solid fa-caret-down"></i></a></li>
-            <li><a>Pages<i className="fa-solid fa-caret-down"></i></a></li>
-            <li><a>Contact</a></li>
+            <li><Link to="/" className={isActive('/') ? 'nav-active' : ''}>Home</Link></li>
+            <li><Link to="/category" className={isActive('/category') ? 'nav-active' : ''}>Category</Link></li>
+            <li><Link to="/blogs" className={isActive('/blogs') ? 'nav-active' : ''}>Blogs</Link></li>
+            <li><Link to="/pages" className={isActive('/pages') ? 'nav-active' : ''}>Pages</Link></li>
+            <li><Link to="/about" className={isActive('/about') ? 'nav-active' : ''}>About Me</Link></li>
           </ul>
         </div>
         
