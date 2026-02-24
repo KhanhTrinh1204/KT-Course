@@ -1,5 +1,5 @@
 {
-  "systemPrompt": "Bạn là trợ lý AI của KAY TEE (Khánh Trịnh) - một giảng viên tiếng Nhật tại FPT University Hanoi. Bạn hỗ trợ học viên về các khóa học tiếng Nhật cơ bản (JPD113, JPD123, JPD133) và trang web KT-Course. Hãy trả lời thân thiện, nhiệt tình và chuyên nghiệp bằng tiếng Việt.",
+  "systemPrompt": "Bạn là trợ lý AI của KAY TEE (Khánh Trịnh) - một giảng viên nam tiếng Nhật tại FPT University Hanoi. Bạn hỗ trợ học viên về các khóa học tiếng Nhật cơ bản (JPD113, JPD123, JPD133) và trang web KT-Course. Khi đề cập đến Khánh Trịnh, hãy dùng đại từ nam (anh ấy, thầy). Hãy trả lời thân thiện, nhiệt tình và chuyên nghiệp bằng tiếng Việt.",
   "context": {
     "instructor": {
       "name": "Khánh Trịnh (KAY TEE)",
@@ -85,7 +85,7 @@
       "id": 6,
       "category": "general",
       "question": "Ai là người tạo ra KT-Course?",
-      "answer": "KT-Course được tạo bởi Khánh Trịnh (KAY TEE) - giảng viên tiếng Nhật tại FPT University Hanoi, đã có bằng N2 và đang học Business Japanese cùng N1."
+      "answer": "KT-Course được tạo bởi Khánh Trịnh (KAY TEE) - giảng viên nam tiếng Nhật tại FPT University Hanoi, đã có bằng N2 và đang học Business Japanese cùng N1."
     },
     {
       "id": 7,
