@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CONFIG } from '../config';
+import qaData from '../data/kt-course-qa.json';
 
 export const useGeminiChat = () => {
   const [messages, setMessages] = useState([
@@ -21,6 +22,24 @@ export const useGeminiChat = () => {
       .replace(/\n/g, '<br>');
   };
 
+  // Build context from Q&A data
+  const buildContext = () => {
+    let context = qaData.systemPrompt + '\n\n';
+    context += 'THÔNG TIN QUAN TRỌNG:\n';
+    context += `- Giảng viên: ${qaData.context.instructor.name}\n`;
+    context += `- Trình độ: ${qaData.context.instructor.qualifications.join(', ')}\n`;
+    context += `- Website: ${qaData.context.website.name} - ${qaData.context.website.purpose}\n`;
+    context += `- Các môn học: JPD113, JPD123, JPD133\n\n`;
+    
+    // Add sample Q&A for context
+    context += 'MỘT SỐ CÂU HỎI THƯỜNG GẶP:\n';
+    qaData.qa.slice(0, 10).forEach(item => {
+      context += `Q: ${item.question}\nA: ${item.answer}\n\n`;
+    });
+    
+    return context;
+  };
+
   const sendMessage = async (userMessage) => {
     if (!userMessage.trim()) return;
 
@@ -34,9 +53,13 @@ export const useGeminiChat = () => {
     setIsLoading(true);
 
     try {
+      // Build enhanced prompt with context
+      const contextPrompt = buildContext();
+      const fullPrompt = `${contextPrompt}\n\nCâu hỏi của người dùng: ${userMessage}\n\nHãy trả lời dựa trên thông tin về KT-Course và Khánh Trịnh ở trên. Nếu không biết, hãy gợi ý liên hệ qua Facebook.`;
+
       const requestBody = {
         contents: [{
-          parts: [{ text: userMessage }]
+          parts: [{ text: fullPrompt }]
         }],
         generationConfig: CONFIG.GENERATION_CONFIG
       };

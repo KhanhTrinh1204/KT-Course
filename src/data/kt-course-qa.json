@@ -1,0 +1,199 @@
+{
+  "systemPrompt": "Bạn là trợ lý AI của KAY TEE (Khánh Trịnh) - một giảng viên tiếng Nhật tại FPT University Hanoi. Bạn hỗ trợ học viên về các khóa học tiếng Nhật cơ bản (JPD113, JPD123, JPD133) và trang web KT-Course. Hãy trả lời thân thiện, nhiệt tình và chuyên nghiệp bằng tiếng Việt.",
+  "context": {
+    "instructor": {
+      "name": "Khánh Trịnh (KAY TEE)",
+      "qualifications": [
+        "Đã có bằng JLPT N2",
+        "Đang học tiếng Nhật Business và N1",
+        "Du học sinh Nhật Bản (2019-2021)",
+        "Giảng viên tại FPT University Hanoi"
+      ],
+      "experience": "Giảng dạy các môn JPD113, JPD123, JPD133",
+      "contact": {
+        "facebook": "https://www.facebook.com/kaytee1204/",
+        "youtube": "Learn Japanese Channel"
+      }
+    },
+    "website": {
+      "name": "KT-Course",
+      "url": "Website học tiếng Nhật",
+      "purpose": "Chia sẻ tài nguyên và nội dung học tiếng Nhật từ cơ bản",
+      "target": "Người mới bắt đầu và sinh viên học tiếng Nhật cơ sở",
+      "cost": "Hoàn toàn miễn phí",
+      "features": [
+        "Học chữ cái Hiragana, Katakana",
+        "Ngữ pháp cơ bản",
+        "Video hướng dẫn",
+        "Tài liệu học tập",
+        "AI Chat hỗ trợ"
+      ]
+    },
+    "courses": {
+      "JPD113": {
+        "name": "Elementary Japanese 1-A1/A2 (JPD113)",
+        "level": "Cơ bản - Nhập môn",
+        "content": "Chữ cái tiếng Nhật và ngữ pháp nhập môn",
+        "semester": "Semester 3"
+      },
+      "JPD123": {
+        "name": "Elementary Japanese 1-A1/A2 (JPD123)",
+        "level": "Cơ bản - Tiếp nối",
+        "content": "Mở rộng ngữ pháp và khả năng sử dụng tiếng Nhật",
+        "semester": "Semester 4"
+      },
+      "JPD133": {
+        "name": "Elementary Japanese 1-A1/A2 (JPD133)",
+        "level": "Cơ bản - Nâng cao",
+        "content": "Củng cố kỹ năng tiếng Nhật sơ cấp",
+        "semester": "Semester 5"
+      }
+    }
+  },
+  "qa": [
+    {
+      "id": 1,
+      "category": "general",
+      "question": "KT-Course là gì?",
+      "answer": "KT-Course là một website chia sẻ tài nguyên và nội dung học tiếng Nhật từ cơ bản, phục vụ cho việc tự học. Website được tạo bởi Khánh Trịnh (KAY TEE) để hỗ trợ việc học tiếng Nhật hoàn toàn miễn phí."
+    },
+    {
+      "id": 2,
+      "category": "general",
+      "question": "Trang KT-Course dành cho ai?",
+      "answer": "Trang phù hợp với người mới bắt đầu học tiếng Nhật và sinh viên học các môn tiếng Nhật cơ sở như JPD113, JPD123, JPD133."
+    },
+    {
+      "id": 3,
+      "category": "general",
+      "question": "KT-Course có phải là khóa học chính thức không?",
+      "answer": "Không. Đây là website chia sẻ tài nguyên học tập, không phải khóa học cấp chứng chỉ. Tuy nhiên, nội dung được biên soạn bởi giảng viên có kinh nghiệm."
+    },
+    {
+      "id": 4,
+      "category": "general",
+      "question": "Học trên KT-Course có mất phí không?",
+      "answer": "Không. Tất cả nội dung trên KT-Course hoàn toàn miễn phí cho mọi người học."
+    },
+    {
+      "id": 5,
+      "category": "general",
+      "question": "KT-Course dạy những nội dung gì?",
+      "answer": "KT-Course cung cấp: chữ cái tiếng Nhật (Hiragana, Katakana), ngữ pháp cơ bản, video học tập, tài liệu hỗ trợ, và các nội dung liên quan đến môn JPD113, JPD123, JPD133."
+    },
+    {
+      "id": 6,
+      "category": "general",
+      "question": "Ai là người tạo ra KT-Course?",
+      "answer": "KT-Course được tạo bởi Khánh Trịnh (KAY TEE) - giảng viên tiếng Nhật tại FPT University Hanoi, đã có bằng N2 và đang học Business Japanese cùng N1."
+    },
+    {
+      "id": 7,
+      "category": "roadmap",
+      "question": "Nên học KT-Course theo thứ tự nào?",
+      "answer": "Nên bắt đầu từ Hiragana, Katakana, sau đó đến ngữ pháp cơ bản và các môn JPD113 → JPD123 → JPD133 theo thứ tự."
+    },
+    {
+      "id": 8,
+      "category": "courses",
+      "question": "JPD113 là học gì?",
+      "answer": "JPD113 (Elementary Japanese 1-A1/A2) là môn tiếng Nhật cơ bản, tập trung vào chữ cái và ngữ pháp nhập môn. Đây là môn đầu tiên trong chuỗi môn tiếng Nhật cơ sở."
+    },
+    {
+      "id": 9,
+      "category": "courses",
+      "question": "JPD123 là học gì?",
+      "answer": "JPD123 là môn tiếp nối JPD113, mở rộng ngữ pháp và khả năng sử dụng tiếng Nhật ở mức độ cao hơn."
+    },
+    {
+      "id": 10,
+      "category": "courses",
+      "question": "JPD133 là học gì?",
+      "answer": "JPD133 là môn nâng cao hơn trong nhóm cơ sở, giúp củng cố kỹ năng tiếng Nhật và hoàn thiện trình độ sơ cấp."
+    },
+    {
+      "id": 11,
+      "category": "courses",
+      "question": "Học xong các môn này đạt trình độ nào?",
+      "answer": "Sau khi học xong JPD113, JPD123, JPD133, người học đạt trình độ tương đương sơ cấp (A1/A2), có thể thi JLPT N5 và một phần N4."
+    },
+    {
+      "id": 12,
+      "category": "alphabet",
+      "question": "Trang có dạy Hiragana không?",
+      "answer": "Có. KT-Course có nội dung học Hiragana đầy đủ kèm video hướng dẫn viết chuẩn theo thứ tự nét."
+    },
+    {
+      "id": 13,
+      "category": "alphabet",
+      "question": "Trang có dạy Katakana không?",
+      "answer": "Có. KT-Course cung cấp tài nguyên học Katakana với video hướng dẫn chi tiết."
+    },
+    {
+      "id": 14,
+      "category": "grammar",
+      "question": "KT-Course có dạy ngữ pháp tiếng Nhật không?",
+      "answer": "Có. Trang có nội dung ngữ pháp tiếng Nhật cơ bản với ví dụ minh họa và giải thích bằng tiếng Việt."
+    },
+    {
+      "id": 15,
+      "category": "grammar",
+      "question": "Có học Kanji không?",
+      "answer": "Có. KT-Course có nội dung liên quan đến Kanji cơ bản, kèm âm Hán Việt để dễ nhớ."
+    },
+    {
+      "id": 16,
+      "category": "skills",
+      "question": "Trang có dạy phát âm không?",
+      "answer": "Có. Video trên trang hỗ trợ học phát âm chuẩn tiếng Nhật."
+    },
+    {
+      "id": 17,
+      "category": "skills",
+      "question": "Có luyện speaking không?",
+      "answer": "Có. Trang có video hướng dẫn speaking và tips cho kỳ thi nói, đặc biệt là FE Speaking cho các môn JPD."
+    },
+    {
+      "id": 18,
+      "category": "resources",
+      "question": "KT-Course có video học không?",
+      "answer": "Có. KT-Course sử dụng video học tập được liên kết từ YouTube, có thể xem trực tiếp trên web."
+    },
+    {
+      "id": 19,
+      "category": "resources",
+      "question": "Có tài liệu PDF hoặc slide để tải không?",
+      "answer": "Có một số tài liệu hỗ trợ học tập. Bạn có thể liên hệ qua Facebook để được hỗ trợ thêm."
+    },
+    {
+      "id": 20,
+      "category": "jlpt",
+      "question": "KT-Course có giúp ôn JLPT không?",
+      "answer": "Có. Nội dung phù hợp cho việc ôn JLPT sơ cấp, đặc biệt là N5 và một phần N4."
+    },
+    {
+      "id": 21,
+      "category": "usage",
+      "question": "Làm sao để bắt đầu học trên KT-Course?",
+      "answer": "Chỉ cần truy cập website và chọn nội dung muốn học. Không cần đăng ký hay đăng nhập, hoàn toàn tự do."
+    },
+    {
+      "id": 22,
+      "category": "contact",
+      "question": "Muốn liên hệ với Khánh Trịnh thì làm sao?",
+      "answer": "Bạn có thể liên hệ qua Facebook: facebook.com/kaytee1204 hoặc xem video trên YouTube channel của Khánh Trịnh."
+    },
+    {
+      "id": 23,
+      "category": "instructor",
+      "question": "Khánh Trịnh có trình độ tiếng Nhật như thế nào?",
+      "answer": "Khánh Trịnh đã có bằng JLPT N2, từng du học Nhật Bản (2019-2021), và hiện đang học tiếng Nhật Business cùng N1. Anh ấy là giảng viên tại FPT University Hanoi."
+    },
+    {
+      "id": 24,
+      "category": "feedback",
+      "question": "Có học viên nào học tốt nhờ KT-Course không?",
+      "answer": "Có rất nhiều! Trang có mục 'Popular Feedbacks' hiển thị phản hồi từ học viên, trong đó có nhiều bạn đạt điểm cao (9.9, 10.0) trong các môn JPD."
+    }
+  ]
+}
