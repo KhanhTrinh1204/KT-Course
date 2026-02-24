@@ -1,0 +1,8 @@
+/* Import existing CSS files from public */
+@import url('/css/style.css');
+@import url('/css/dark.css');
+@import url('/css/responsive.css');
+
+.App {
+  min-height: 100vh;
+}
